@@ -10,6 +10,15 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+app.get('/ping', function(req, res) {
+
+	res.status(200)
+		.send({
+			'success': true,
+			'data' : "SampleProject_backend ping"
+		});
+
+});
 
 app.use('/', function(req, res){
 
