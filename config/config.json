@@ -1,0 +1,9 @@
+{
+    "development" : {
+        "username": "root",
+        "password": "mypassword",
+        "database": "domback_db",
+        "host": "domsql",
+        "dialect": "mysql"
+    }
+}

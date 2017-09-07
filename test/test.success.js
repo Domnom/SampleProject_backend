@@ -34,11 +34,68 @@ describe("Good - Helpful service", function() {
  		var envObj = helpfulService.getEnv();
 
  		expect(envObj).to.have.property('DB_DIALECT').to.equal('mysql');
- 		expect(envObj).to.have.property('DB_HOST').to.equal('its-mysql');
+ 		expect(envObj).to.have.property('DB_HOST').to.equal('sample-mysql');
  		expect(envObj).to.have.property('DB_PORT').to.equal('3306');
  		expect(envObj).to.have.property('DB_NAME').to.equal('backend_api_db');
  		expect(envObj).to.have.property('DB_USERNAME').to.equal('root');
  		expect(envObj).to.have.property('DB_PASSWORD').to.equal('mypassword');
+ 	});
+
+ 	it ('Should create a new game in the DB', function(done) {
+
+ 		chai.request('localhost')
+ 			.post('/game')
+ 			.send({
+ 				'name' : 'Cluedo'
+ 			})
+ 			.end(function(err, res) {
+
+ 				expect(res).to.have.status(200);
+ 				expect(res.body).to.include.all.keys('success', 'data');
+ 				expect(res.body.success).to.equal(true);
+ 				expect(res.body.data).to.have.property('id').to.equal(1);
+ 				expect(res.body.data).to.have.property('name').to.equal('Cluedo');
+
+ 				done();
+ 			});
+
+ 	});
+
+ 	it ('Should update the Cleudo game in the DB', function(done) {
+
+ 		chai.request('localhost')
+ 			.put('/game/1')
+ 			.send({
+ 				'name' : 'Cluedo 2017'
+ 			})
+ 			.end(function(err, res) {
+
+ 				expect(res).to.have.status(200);
+ 				expect(res.body).to.include.all.keys('success', 'data');
+ 				expect(res.body.success).to.equal(true);
+ 				expect(res.body.data).to.have.property('id').to.equal(1);
+ 				expect(res.body.data).to.have.property('name').to.equal('Cluedo 2017');
+
+ 				done();
+ 			});
+ 	});
+
+ 	it ('Should retrieve the updated Cleudo game in the DB', function(done) {
+
+ 		chai.request('localhost')
+ 			.get('/game/1')
+ 			.end(function(err, res) {
+
+ 				expect(res).to.have.status(200);
+ 				expect(res.body).to.include.all.keys('success', 'data');
+ 				expect(res.body.success).to.equal(true);
+ 				expect(res.body.data).to.be.an('array');
+ 				expect(res.body.data[0]).to.have.property('id').to.equal(1);
+ 				expect(res.body.data[0]).to.have.property('name').to.equal('Cluedo 2017');
+
+ 				done();
+ 			});
+
  	});
 
  })
